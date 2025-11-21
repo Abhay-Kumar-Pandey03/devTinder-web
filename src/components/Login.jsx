@@ -9,6 +9,7 @@ const Login = () => {
     const [emailId, setEmailId] = useState("abhaypandey@gmail.in");
     const [password, setPassword] = useState("Abhay@1118");
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState("");
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -30,6 +31,7 @@ const Login = () => {
             return navigate("/");
         }
         catch(err) {
+            setError(err?.response?.data || "Login failed. Please try again.");
             console.error("Login failed:", err);
         }
     }
@@ -163,6 +165,7 @@ const Login = () => {
                         </div>
 
                         {/* SUBMIT BUTTON */}
+                        <p className="text-red-500 text-sm mb-2">{error}</p>
                         <div className="form-control mt-2 flex justify-center items-center">
                             <button className="btn btn-primary px-10" type="submit" onClick={handleLogin}>
                                 Login
