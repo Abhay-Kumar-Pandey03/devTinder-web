@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -57,12 +57,19 @@ const NavBar = () => {
                 Profile
                 </Link>
             </li>
+
             <li>
-                <a>Settings</a>
+                <Link to="/connections">Connections</Link>
             </li>
+            
+            <li>
+                <Link to="/requests">Requests</Link>
+            </li>
+
             <li>
                 <a onClick= {handleLogout}>Logout</a>
             </li>
+
             </ul>
         </div>
         </div>
