@@ -44,7 +44,7 @@ const NavBar = () => {
             <div className="w-10 rounded-full">
                 <img
                 alt="user photo"
-                src={user.photoUrl}
+                src={user.photoUrl || "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3407.jpg?semt=ais_hybrid&w=740&q=80"}
                 />
             </div>
             </div>

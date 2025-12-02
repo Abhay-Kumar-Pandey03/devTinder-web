@@ -1,51 +1,134 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import axios from "axios";
-import {useDispatch} from "react-redux";
-import {addUser, removeUser} from "../utils/userSlice";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 
 const Login = () => {
-    const [emailId, setEmailId] = useState("naveen@gmail.in");
-    const [password, setPassword] = useState("Naveen@1019");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [isLoginForm, setIsLoginForm] = useState(true);
+    const [emailId, setEmailId] = useState("");
+    const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("Form submitted");
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     // console.log("Form submitted");
+    // };
+
+    const isStrongPassword = (password) => {
+        const regex =
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
+        return regex.test(password);
     };
 
+
     const handleLogin = async () => {
-        try{
-            const res = await axios.post (
+        try {
+            const res = await axios.post(
                 BASE_URL + "/login", {
                 emailId,
                 password,
             },
-            {withCredentials: true}
+                { withCredentials: true }
             );
-            dispatch(addUser(res.data));
+            dispatch(addUser(res?.data?.data || res?.data));
             return navigate("/");
         }
-        catch(err) {
-            setError(err?.response?.data || "Login failed. Please try again.");
+        catch (err) {
+            setError(err?.response?.data?.message || "Login failed. Please try again.");
             console.error("Login failed:", err);
         }
     }
 
+    const handleSignup = async () => {
+
+        if (!firstName || !lastName || !emailId || !password) {
+            setError("All fields are required");
+            return;
+        }
+
+        if (!isStrongPassword(password)) {
+            setError(
+                "Password must contain Uppercase, Lowercase, Number & Special Character (Min 8 characters)"
+            );
+            return;
+        }
+
+        try {
+
+            const res = await axios.post(
+                BASE_URL + "/signup", {
+                firstName,
+                lastName,
+                emailId,
+                password,
+            },
+                { withCredentials: true }
+            );
+            dispatch(addUser(res?.data?.data || res?.data));
+
+            console.log("Signup Response:", res.data);
+
+            return navigate("/profile");
+        }
+        catch (err) {
+            setError(err?.response?.data?.message || "Signup failed. Please try again.");
+            console.error("Signup failed:", err);
+        }
+    }
+
     return (
-        <div className="flex min-h-screen items-center justify-center bg-base-300">
-            <div className="card bg-base-200 w-96 shadow-xl mx-2 my-2">
-                <div className="card-body">
+        <div className="flex min-h-screen items-center justify-center bg-base-100">
+            <div className="card bg-base-200 w-96 shadow-xl mx-2 my-2 ">
+                <div className="card-body flex flex-col h-full transition-all duration-300">
                     <h2 className="card-title text-2xl font-semibold mb-4 justify-center">
-                        Login
+                        {isLoginForm ? "Login" : "Sign Up"}
                     </h2>
 
+                    {
+                        !isLoginForm && (
+                            <>
+                                {/* FIRST NAME FIELD */}
+                                <div className="form-control mb-5">
+                                    <label className="label mb-1">
+                                        <span className="label-text">First Name</span>
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        value={firstName}
+                                        className="input input-bordered"
+                                        placeholder="Enter your first name"
+                                        onChange={(e) => setFirstName(e.target.value)}
+                                    />
+                                </div>
+
+                                {/* LAST NAME FIELD */}
+                                <div className="form-control mb-5">
+                                    <label className="label mb-1">
+                                        <span className="label-text">Last Name</span>
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        value={lastName}
+                                        className="input input-bordered"
+                                        placeholder="Enter your last name"
+                                        onChange={(e) => setLastName(e.target.value)}
+                                    />
+                                </div>
+                            </>
+                        )
+                    }
+
                     {/* FORM START */}
-                    <form onSubmit={handleSubmit}>
+                    <form>
 
                         {/* EMAIL FIELD */}
                         <div className="form-control mb-5">
@@ -80,10 +163,12 @@ const Login = () => {
                                     value={emailId}
                                     className="grow"
                                     placeholder="Enter your email"
-                                    onChange = {(e) => setEmailId(e.target.value)}
+                                    onChange={(e) => setEmailId(e.target.value)}
                                 />
                             </label>
                         </div>
+
+                        <br />
 
                         {/* PASSWORD FIELD */}
                         <div className="form-control mb-5">
@@ -113,7 +198,7 @@ const Login = () => {
                                     value={password}
                                     className="grow"
                                     placeholder="Enter your password"
-                                    onChange = {(e) => setPassword(e.target.value)}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
 
                                 {/* Show / Hide password */}
@@ -166,17 +251,30 @@ const Login = () => {
 
                         {/* SUBMIT BUTTON */}
                         <p className="text-red-500 text-sm mb-2">{error}</p>
+                        <br />
                         <div className="form-control mt-2 flex justify-center items-center">
-                            <button className="btn btn-primary px-10" type="submit" onClick={handleLogin}>
-                                Login
+                            <button className="btn btn-primary px-10 border border-blue-500/30" type="button" onClick={isLoginForm ? handleLogin : handleSignup}>
+                                {isLoginForm ? "Login" : "Sign Up"}
                             </button>
                         </div>
+                        <br />
+                        <p
+                            className="mt-auto py-3 text-center cursor-pointer text-blue-500 hover:underline"
+                            onClick={() => {
+                                setError("");
+                                setIsLoginForm((value) => !value);
+                            }}
+
+                        >
+                            {isLoginForm ? "New user? Sign Up" : "Already have an account? Login"}
+                        </p>
+
                     </form>
 
                     {/* FORM END */}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 
