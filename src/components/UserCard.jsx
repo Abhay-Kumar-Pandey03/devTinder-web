@@ -42,11 +42,11 @@ const UserCard = ({ user }) => {
                     <h2 className="card-title text-xl justify-center ">{firstName + " " + lastName}</h2>
                     {age && gender && <p>{age + ", " + gender}</p>}
                     <p>{about}</p>
-                    <div className="flex gap-6 mt-6 w-full justify-center">
-                        <button className="btn btn-outline btn-info w-28">
+                    <div className="flex gap-6 mt-6 w-full justify-center ">
+                        <button className="btn btn-outline btn-info w-28 bg-base-100" onClick={() => handleSendRequest("interested", _id)}>
                             Interested
                         </button>
-                        <button className="btn btn-outline btn-error w-28">
+                        <button className="btn btn-outline btn-error w-28 bg-base-100" onClick={() => handleSendRequest("ignored", _id)}>
                             Ignored
                         </button>
                     </div>
