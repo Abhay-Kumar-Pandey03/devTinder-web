@@ -1,6 +1,6 @@
 import { use, useState } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
@@ -15,6 +15,9 @@ const Login = () => {
     const [error, setError] = useState("");
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const user = useSelector((store) => store.user);
+
 
     // const handleSubmit = (e) => {
     //     e.preventDefault();
@@ -82,9 +85,9 @@ const Login = () => {
             console.error("Signup failed:", err);
         }
     }
-
+    console.log(user)
     return (
-        <div className="flex min-h-screen items-center justify-center bg-base-100">
+        user == null ? (<div className="flex min-h-screen items-center justify-center bg-base-100">
             <div className="card bg-base-200 w-96 shadow-xl mx-2 my-2 ">
                 <div className="card-body flex flex-col h-full transition-all duration-300">
                     <h2 className="card-title text-2xl font-semibold mb-4 justify-center">
@@ -274,7 +277,7 @@ const Login = () => {
                     {/* FORM END */}
                 </div>
             </div>
-        </div >
+        </div >) : navigate("/")
     );
 };
 
