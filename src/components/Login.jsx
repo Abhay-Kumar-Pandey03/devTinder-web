@@ -192,12 +192,15 @@ const Login = () => {
 
                     {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
 
-                    <button
-                        className="btn btn-primary w-full"
-                        onClick={isLoginForm ? handleLogin : handleSignup}
-                    >
-                        {isLoginForm ? "Login" : "Sign Up"}
-                    </button>
+                    <div className="flex justify-center">
+                        <button
+                            className="btn btn-primary px-10"
+                            onClick={isLoginForm ? handleLogin : handleSignup}
+                        >
+                            {isLoginForm ? "Login" : "Sign Up"}
+                        </button>
+                    </div>
+
 
                     {/* 🔵 FIXED BLUE LINK (PRODUCTION SAFE) */}
                     <p
