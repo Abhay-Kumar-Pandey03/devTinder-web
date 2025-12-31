@@ -9,6 +9,12 @@ import Feed from "./components/Feed";
 import Connections from "./components/Connections";
 import Requests from "./components/Requests";
 
+// 🔹 IMPORT NEW PAGES
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Terms from "./pages/Terms";
+
 function AppRoutes() {
   const user = useSelector((store) => store.user);
 
@@ -16,7 +22,7 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={<Body />}>
 
-        {/* ✅ ONLY THIS ROUTE CONTROLS REDIRECT */}
+        {/* 🔁 Redirect ONLY for root path */}
         <Route
           index
           element={
@@ -26,11 +32,18 @@ function AppRoutes() {
           }
         />
 
+        {/* 🔐 Auth / App Routes */}
         <Route path="login" element={<Login />} />
         <Route path="feed" element={<Feed />} />
         <Route path="profile" element={<Profile />} />
         <Route path="connections" element={<Connections />} />
         <Route path="requests" element={<Requests />} />
+
+        {/* 🌍 PUBLIC LEGAL & INFO ROUTES (NO AUTH REQUIRED) */}
+        <Route path="about" element={<About />} />
+        <Route path="contact" element={<Contact />} />
+        <Route path="privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="terms-and-conditions" element={<Terms />} />
 
       </Route>
     </Routes>
