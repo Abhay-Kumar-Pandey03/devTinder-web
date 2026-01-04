@@ -4,7 +4,7 @@ import { BASE_URL } from "../utils/constants";
 
 
 const Premium = () => {
-    
+
     const [isUserPremium, setIsUserPremium] = useState(false);
     useEffect(() => {
         verifyIsPremium();
@@ -27,40 +27,49 @@ const Premium = () => {
     }
 
     const handleBuyClick = async (type) => {
-        const order = await axios.post(BASE_URL + "/payment/create", {
-            membershipType: type,
-        },
-            {
-                withCredentials: true,
-            });
-
-        //It should open the Razorpay dialog box
-        const { amount, currency, orderId, notes, receipt, keyId } = order.data;
-
-        const options = {
-            key: keyId,
-            amount,
-            currency,
-            name: 'Dev Tinder',
-            description: 'Connecting Developers Worldwide',
-            order_id: orderId,
-            prefill: {
-                name: notes.firstName + ' ' + notes.lastName,
-                email: notes.emailId,
-                contact: '9999999999'
+        try {
+            const order = await axios.post(BASE_URL + "/payment/create", {
+                membershipType: type,
             },
+                {
+                    withCredentials: true,
+                });
 
-            theme: {
-                color: '#F37254'
-            },
+            //It should open the Razorpay dialog box
+            const { amount, currency, orderId, notes, receipt, keyId } = order.data;
 
-            handler: verifyIsPremium
-        };
+            const options = {
+                key: keyId,
+                amount,
+                currency,
+                name: 'Dev Tinder',
+                description: 'Connecting Developers Worldwide',
+                order_id: orderId,
+                prefill: {
+                    name: notes.firstName + ' ' + notes.lastName,
+                    email: notes.emailId,
+                    contact: '9999999999'
+                },
 
-        const rzp = new window.Razorpay(options);
-        rzp.open();
+                theme: {
+                    color: '#F37254'
+                },
 
-    }
+                handler: () => {
+                    setTimeout(() => {
+                        verifyIsPremium();
+                    }, 1500); // wait for webhook
+                }
+
+            };
+
+            const rzp = new window.Razorpay(options);
+            rzp.open();
+        }
+        catch (err) {
+            console.error("Error initiating payment:", err);
+        }
+    };
     return (
         isUserPremium ?
             "You are already a premium member!" :
