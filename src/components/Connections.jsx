@@ -3,6 +3,7 @@ import { BASE_URL } from "../utils/constants";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addConnection } from "../utils/connectionSlice";
+import { Link } from "react-router-dom";
 
 const Connections = () => {
     const connections = useSelector((store) => store.connections);
@@ -23,7 +24,7 @@ const Connections = () => {
         fetchConnections();
     }, []);
 
-    if(!connections) {
+    if (!connections) {
         return;
     }
 
@@ -41,21 +42,68 @@ const Connections = () => {
 
             {
                 connections.map((connection) => {
-                    const {_id, firstName, lastName, photoUrl, age, gender, about} = connection;
+                    const {
+                        _id,
+                        firstName,
+                        lastName,
+                        photoUrl,
+                        age,
+                        gender,
+                        about,
+                    } = connection;
+
                     return (
-                        <div key={_id} className="max-w-md mx-auto bg-base-200 my-3 rounded-2xl shadow-md p-6 flex items-center gap-6">
-                            <div className="">
-                                <img alt= "photo" className="w-20 h-20 rounded-full"src = {photoUrl}></img>
+                        <div
+                            key={_id}
+                            className="max-w-2xl mx-auto bg-base-200 my-4 rounded-2xl shadow-md
+                                        p-5 flex items-center justify-between gap-6
+                                        transition-all duration-300 hover:shadow-xl hover:scale-[1.02]"
+                        >
+                            {/* LEFT: PROFILE INFO */}
+                            <div className="flex items-center gap-5 cursor-pointer">
+                                {/* Avatar */}
+                                <div className="relative">
+                                    <img
+                                        alt="photo"
+                                        className="w-20 h-20 rounded-full object-cover border-2 border-primary"
+                                        src={photoUrl}
+                                    />
+                                </div>
+
+                                {/* User Details */}
+                                <div className="text-left">
+                                    <h2 className="font-semibold text-lg">
+                                        {firstName} {lastName}
+                                    </h2>
+
+                                    {age && gender && (
+                                        <p className="text-sm text-base-content/70">
+                                            {age}, {gender}
+                                        </p>
+                                    )}
+
+                                    {about && (
+                                        <p className="text-sm text-base-content/60 mt-1 line-clamp-2 max-w-sm">
+                                            {about}
+                                        </p>
+                                    )}
+                                </div>
                             </div>
-                            
-                            <div className="mx-4 text-left">
-                                <h2 className="font-bold text-xl">{firstName + " " + lastName}</h2>
-                                { age && gender && <p>{age + ", " + gender}</p> }
-                                <p>{about}</p>
-                            </div>
+
+                            {/* RIGHT: CHAT ACTION */}
+                            <Link to={`/chat/${_id}`} state={{firstName, lastName, photoUrl}}>
+                            <button
+                                className="btn btn-primary btn-outline flex items-center gap-2
+                                            transition-all duration-200 hover:btn-primary"
+                                onClick={() => console.log("Open chat with", _id)}
+                            >
+                                💬 Chat
+                            </button>
+                            </Link>
                         </div>
-                    )
+                    );
                 })
+
             }
         </div>
     )

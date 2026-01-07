@@ -9,6 +9,7 @@ import Feed from "./components/Feed";
 import Connections from "./components/Connections";
 import Requests from "./components/Requests";
 import Premium from "./components/Premium";
+import Chat from "./components/Chat";
 
 // 🔹 IMPORT NEW PAGES
 import About from "./pages/About";
@@ -40,6 +41,7 @@ function AppRoutes() {
         <Route path="connections" element={<Connections />} />
         <Route path="requests" element={<Requests />} />
         <Route path="premium" element={<Premium />} />
+        <Route path="chat/:targetUserId" element={<Chat />} />
 
         {/* 🌍 PUBLIC LEGAL & INFO ROUTES (NO AUTH REQUIRED) */}
         <Route path="about" element={<About />} />
