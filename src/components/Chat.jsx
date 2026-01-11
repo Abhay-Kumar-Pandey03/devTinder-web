@@ -19,6 +19,10 @@ const Chat = () => {
 
     const bottomRef = useRef(null);
 
+    console.log("Log1" , targetUserId + " " + targetUser);
+    console.log("Log2" , socket + " " + onlineUsers);
+    console.log("Log3" , canChat);
+
     /* ---------------- Fetch chat history ---------------- */
     useEffect(() => {
         const fetchMessages = async () => {
