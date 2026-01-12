@@ -50,11 +50,11 @@ const AdminDashboard = () => {
 
             {/* ACTIONS */}
             <div className="mt-8">
-                <h2 className="text-lg font-semibold mb-3">Quick Actions</h2>
+                <h2 className="text-lg font-semibold mb-3">Quick Actions</h2>   
                 <div className="mt-6">
-                    <h2 className="text-lg font-semibold mb-4 text-gray-200">
+                    {/* <h2 className="text-lg font-semibold mb-4 text-gray-200">
                         Quick Actions
-                    </h2>
+                    </h2> */}
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <button
